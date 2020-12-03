@@ -18,6 +18,8 @@ public class Wallet {
     @Id
     private Long id;
 
+    private Double balance;
+
     @ManyToOne(fetch = FetchType.EAGER)
     private User user;
 }

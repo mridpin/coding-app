@@ -1,11 +1,10 @@
 package com.ridao.pagacoins.controller;
 
-import com.ridao.pagacoins.dto.UserDTO;
 import com.ridao.pagacoins.dto.WalletDTO;
 import com.ridao.pagacoins.model.User;
 import com.ridao.pagacoins.model.Wallet;
-import com.ridao.pagacoins.repository.UserRepository;
-import com.ridao.pagacoins.repository.WalletRepository;
+import com.ridao.pagacoins.service.UserService;
+import com.ridao.pagacoins.service.WalletService;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,10 +24,10 @@ import java.util.stream.Collectors;
 public class WalletController {
 
     @Autowired
-    WalletRepository repository;
+    WalletService walletService;
 
     @Autowired
-    UserRepository userRepository;
+    UserService userService;
 
     @Autowired
     private ModelMapper mapper;
@@ -36,21 +35,38 @@ public class WalletController {
 
     Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    @GetMapping(path = "/user/{id}/wallets", produces = "application/json; " +
+    @GetMapping(path = "/user/{id}/wallet", produces = "application/json; " +
             "charset=UTF-8")
     @ResponseBody
-    public ResponseEntity<List<WalletDTO>> listWalletsFromUser(@PathVariable(
+    public ResponseEntity<List<WalletDTO>> getAllWalletsFromUser(@PathVariable(
             "id") Long id) {
         // Get User first, return 404 if no user
-        Optional<User> user = userRepository.findById(id);
+        Optional<User> user = userService.getUserById(id);
         if (!user.isPresent()) {return new ResponseEntity<>(HttpStatus.NOT_FOUND);}
         List<WalletDTO> wallets =
-                repository.findByUser(user.get())
+                walletService.getWalletsFromUser(user.get())
                         .stream()
                         .map(this::entityToDTO)
                         .collect(Collectors.toList());
         logger.info("Wallets found -> {}", wallets.size());
         return new ResponseEntity<List<WalletDTO>>(wallets, HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/wallet/{id}", produces =
+            "application" +
+            "/json; " +
+            "charset=UTF-8")
+    @ResponseBody
+    public ResponseEntity<WalletDTO> getWalletById (@PathVariable(
+            "id") Long id) {
+        Optional<Wallet> wallet = walletService.getWalletById(id);
+        logger.info("Wallet found -> {}", wallet.hashCode());
+        if (wallet.isPresent()) {
+            return new ResponseEntity<WalletDTO>(entityToDTO(wallet.get()),
+                    HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     private WalletDTO entityToDTO (Wallet wallet) {

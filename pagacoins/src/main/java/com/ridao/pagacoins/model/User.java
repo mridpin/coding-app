@@ -19,7 +19,7 @@ public class User {
     @Id
     private Long id;
 
-    @OneToMany(fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
     private List<Wallet> wallets;
 
 }

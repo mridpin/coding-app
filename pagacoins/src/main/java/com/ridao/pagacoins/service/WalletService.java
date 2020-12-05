@@ -22,4 +22,26 @@ public class WalletService {
     public Optional<Wallet> getWalletById(Long id) {
         return repository.findById(id);
     }
+
+    public boolean checkBalance(Wallet wallet, Double amount) {
+        return wallet.getBalance() >= amount;
+    }
+
+    public Wallet makeTransaction(Wallet sender, Wallet beneficiary, Double amount) {
+        addBalance(beneficiary, amount);
+        removeBalance(sender, amount);
+        repository.save(sender);
+        repository.save(beneficiary);
+        return sender;
+    }
+
+    private void removeBalance(Wallet sender, Double amount) {
+        Double currentBalance = sender.getBalance();
+        sender.setBalance(currentBalance - amount);
+    }
+
+    private void addBalance(Wallet beneficiary, Double amount) {
+        Double currentBalance = beneficiary.getBalance();
+        beneficiary.setBalance(currentBalance + amount);
+    }
 }

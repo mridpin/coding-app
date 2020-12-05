@@ -1,5 +1,6 @@
 package com.ridao.pagacoins.controller;
 
+import com.ridao.pagacoins.dto.TransactionDTO;
 import com.ridao.pagacoins.dto.WalletDTO;
 import com.ridao.pagacoins.model.User;
 import com.ridao.pagacoins.model.Wallet;
@@ -10,11 +11,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -67,6 +66,31 @@ public class WalletController {
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+    }
+
+    @PostMapping (path = "/wallet/make_transaction",
+            consumes = {MediaType.APPLICATION_JSON_VALUE},
+            produces = {MediaType.APPLICATION_JSON_VALUE})
+    @ResponseBody
+    public ResponseEntity<WalletDTO> makeTransaction (
+            @RequestBody TransactionDTO transactionDTO) {
+        Optional<Wallet> sender =
+                walletService.getWalletById(transactionDTO.getSenderId());
+        Optional<Wallet> beneficiary =
+                walletService.getWalletById(transactionDTO.getBeneficiaryId());
+        logger.info("Wallet found -> {}", sender.hashCode());
+        logger.info("Wallet found -> {}", beneficiary.hashCode());
+        // Discard requests with non existing wallets
+        if (!sender.isPresent() || !beneficiary.isPresent()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        if (!walletService.checkBalance(sender.get(), transactionDTO.getAmount())) {
+            return new ResponseEntity<>(HttpStatus.PRECONDITION_FAILED);
+        }
+        walletService.makeTransaction(sender.get(), beneficiary.get(),
+                transactionDTO.getAmount());
+        return new ResponseEntity<WalletDTO>(entityToDTO(sender.get()),
+                HttpStatus.OK);
     }
 
     private WalletDTO entityToDTO (Wallet wallet) {

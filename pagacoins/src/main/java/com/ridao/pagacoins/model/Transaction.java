@@ -1,9 +1,7 @@
 package com.ridao.pagacoins.model;
 
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.Id;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
+
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,10 +21,12 @@ public class Transaction {
 
     private Double amount;
 
-    @OneToOne(fetch = FetchType.EAGER)
-    private Wallet sender;
-
-    @OneToOne(fetch = FetchType.EAGER)
-    private Wallet beneficiary;
+//    @OneToOne(fetch = FetchType.EAGER)
+//    @JoinColumn(name = "sender")
+//    private Wallet sender;
+//
+//    @OneToOne(fetch = FetchType.EAGER)
+//    @JoinColumn(name = "beneficiary")
+//    private Wallet beneficiary;
 
 }

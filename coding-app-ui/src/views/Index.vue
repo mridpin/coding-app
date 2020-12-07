@@ -11,7 +11,7 @@ import Users from '@/components/Users.vue'
 export default {
   name: 'App',
   components: {
-    Users
+    Users,
   }
 }
 </script>

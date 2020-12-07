@@ -34,6 +34,7 @@ public class WalletController {
 
     Logger logger = LoggerFactory.getLogger(this.getClass());
 
+    @CrossOrigin(origins = "http://localhost:8080")
     @GetMapping(path = "/user/{id}/wallet", produces = "application/json; " +
             "charset=UTF-8")
     @ResponseBody
@@ -51,6 +52,7 @@ public class WalletController {
         return new ResponseEntity<List<WalletDTO>>(wallets, HttpStatus.OK);
     }
 
+    @CrossOrigin(origins = "http://localhost:8080")
     @GetMapping(path = "/wallet/{id}", produces =
             "application" +
             "/json; " +
@@ -68,6 +70,7 @@ public class WalletController {
         }
     }
 
+    @CrossOrigin(origins = "http://localhost:8080")
     @PostMapping (path = "/wallet/make_transaction",
             consumes = {MediaType.APPLICATION_JSON_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE})

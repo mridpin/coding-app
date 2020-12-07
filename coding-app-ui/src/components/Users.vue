@@ -1,25 +1,31 @@
 
 <template>
 <div class="Users">
-    <h1>Admin panel</h1>
     <!-- Table for users -->
     <table class="users-table">
         <th>
             <td>User</td>
         </th>
-        <tr v-for="user in users" :key="user.id">
+        <tr v-for="user in users" :key="user.id" v-on:click=getWalletsFromUser(user.id)>
             <td>{{ user.id }}</td>
         </tr>
     </table>
+    <div v-show="showWallets">
+      <Wallets ref="Wallets"></Wallets>
+    </div>
 </div>
 </template>
 
 <script>
     const usersUrl = "http://192.168.0.18:8000/user"
     import axios from 'axios'
+    import Wallets from '@/components/Wallets.vue'
     
     export default {
       name: 'Users',
+      components: {
+        Wallets,
+      },
       mounted: function () {
         this.getUsers()
       },
@@ -27,6 +33,7 @@
         return {
           message: 'Users table rows',
           users: [],
+          showWallets: false
         }
       },
       methods: {
@@ -47,7 +54,14 @@
           .catch(function (error) {
             console.log(error)
           })
-        }      
+        },
+        getWalletsFromUser: function(userId) {
+          var self = this;
+          self.showWallets = true;
+          this.$refs.Wallets.showTransaction = false;
+          this.$refs.Wallets.getWalletsFromUser(userId);
+        }    
       }
     }
+
 </script>

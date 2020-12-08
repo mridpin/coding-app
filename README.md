@@ -31,3 +31,4 @@ To run the UI app:
 ```
 npm run serve
 ```
+UI web page can be accessed from localhost:8080

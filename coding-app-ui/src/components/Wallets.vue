@@ -1,29 +1,45 @@
 
 <template>
-<div class="Wallets">
+<div class="Wallets container">
+    <h1 class="title is-4"> Pagacoins wallet </h1> 
     <!-- Table for wallets -->
-    <table class="wallets-table">
-        <th>
-            <td>Wallet</td>
-            <td>Balance</td>
-        </th>
-        <tr v-for="wallet in wallets" :key="wallet.id" v-on:click="openTransactionPanel(wallet.id)">
-            <td>{{ wallet.id }}</td>
-            <td>{{ wallet.balance }}</td>
-        </tr>
+    <table class="table is-fullwidth is-striped is-hoverable">
+      <thead>
+            <th>Wallet</th>
+            <th>Balance</th>
+        </thead>
+        <tbody>
+          <tr v-for="wallet in wallets" :key="wallet.id" v-on:click="openTransactionPanel(wallet)">
+              <td>{{ wallet.id }}</td>
+              <td>{{ wallet.balance }}</td>
+          </tr>
+        </tbody>
     </table>
-    <div v-if="showTransaction">
-      <h3>Make transaction</h3>
+    <div class="modal container" v-if="showTransaction">
+      <h3 class="title is-5">Make transaction</h3>
       <div id="from">
-        <h4>Sender: {{ sender }}</h4>
+        <h4 class="title is-6">Sender ID: {{ sender.id }}</h4>
         <form>
-          <label for="beneficiary">Beneficiary: </label>
-          <input id="beneficiary" v-model="beneficiary" type="text">
-          <br>
-          <label for="amount">Amount to send: </label>
-          <input id="amount" v-model="amount" type="text">
-          <br>
-          <input type="button" value="Send" v-on:click="makeTransaction">
+          <div class="field">
+            <label class="label" for="beneficiary">Beneficiary: </label>
+            <div class="control">
+              <input class="input" id="beneficiary" v-model="beneficiary" type="text" placeholder="Beneficiary id">
+            </div>
+          </div>
+          <div class="field">
+            <label class="label" for="amount">Amount to send: </label>
+            <div class="control">
+              <input class="input" id="amount" v-model="amount" type="text" placeholder="0.00">
+            </div>
+          </div>
+          <div class="field is-grouped">
+            <div class="control">
+              <input class="button is-link is-medium is-left" type="button" value="Send" v-on:click="makeTransaction">
+            </div>
+            <div class="control">
+              <input class="button is-medium is-right is-clear" type="button" value="Close" v-on:click="showTransaction=false">
+            </div>
+          </div>
         </form>
       </div>
     </div>
@@ -41,7 +57,7 @@
           message: 'Wallets table rows',
           wallets: [],
           openUserId: "",
-          sender: "",
+          sender: {},
           beneficiary: "",
           amount: "",
           showTransaction: false
@@ -67,16 +83,16 @@
             console.log(error);
           });
         },
-        openTransactionPanel: function (walletId) {
+        openTransactionPanel: function (wallet) {
           var self = this;
-          self.sender = walletId;
+          self.sender = wallet;
           self.showTransaction = true;
         },
         makeTransaction: function () {
           var self = this;
           // build request object
           var body = {
-            "senderId": self.sender,
+            "senderId": self.sender.id,
             "beneficiaryId": self.beneficiary,
             "amount": self.amount
           };
@@ -100,6 +116,15 @@
           })
           .catch(function (error) {
             console.log(error);
+            if (error.response.status === 412) {
+              alert("Operation error: Insuficient balance");
+            } else if (error.response.status === 406) {
+              alert("Operation failed: Amount not valid");
+            } else if (error.response.status === 400) {
+              alert("Operation failed: Invalid input");
+            } else if (error.response.status === 404) {
+              alert("Operation failed: Beneficiary does not exist");
+            }
           });
         }      
       }

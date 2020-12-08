@@ -1,10 +1,6 @@
 package com.ridao.pagacoins.dto;
 
-import com.ridao.pagacoins.model.Transaction;
-import com.ridao.pagacoins.model.User;
 import lombok.*;
-
-import java.util.List;
 
 @Getter
 @Setter
@@ -19,5 +15,4 @@ public class WalletDTO {
 
     private UserDTO user;
 
-    private List<Transaction> transactions;
 }

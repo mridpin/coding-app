@@ -19,6 +19,8 @@ public class User {
     @Id
     private Long id;
 
+    private String name;
+
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
     private List<Wallet> wallets;
 

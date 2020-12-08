@@ -1,14 +1,19 @@
 
 <template>
 <div class="Users">
+  <h1 class="title is-3">PagaCoins Administration Panel</h1>
     <!-- Table for users -->
-    <table class="users-table">
-        <th>
-            <td>User</td>
-        </th>
+    <table class="table is-fullwidth is-striped is-hoverable">
+      <thead>
+        <th>User ID</th>
+        <th>User Name</th>
+      </thead>
+      <tbody>
         <tr v-for="user in users" :key="user.id" v-on:click=getWalletsFromUser(user.id)>
             <td>{{ user.id }}</td>
+            <td>{{ user.name }}</td>
         </tr>
+      </tbody>
     </table>
     <div v-show="showWallets">
       <Wallets ref="Wallets"></Wallets>

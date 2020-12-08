@@ -6,6 +6,7 @@ import lombok.*;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
+import javax.validation.constraints.NotNull;
 
 @Getter
 @Setter
@@ -14,10 +15,13 @@ import javax.persistence.OneToOne;
 @EqualsAndHashCode
 public class TransactionDTO {
 
+    @NotNull
     private Long senderId;
 
+    @NotNull
     private Long beneficiaryId;
 
+    @NotNull
     private Double amount;
 
 }

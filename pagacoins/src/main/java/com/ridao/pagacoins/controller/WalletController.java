@@ -15,6 +15,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -76,7 +77,7 @@ public class WalletController {
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
     public ResponseEntity<WalletDTO> makeTransaction (
-            @RequestBody TransactionDTO transactionDTO) {
+            @RequestBody @Valid TransactionDTO transactionDTO) {
         Optional<Wallet> sender =
                 walletService.getWalletById(transactionDTO.getSenderId());
         Optional<Wallet> beneficiary =
@@ -86,6 +87,9 @@ public class WalletController {
         // Discard requests with non existing wallets
         if (!sender.isPresent() || !beneficiary.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        if (transactionDTO.getAmount() <= 0) {
+            return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
         }
         if (!walletService.checkBalance(sender.get(), transactionDTO.getAmount())) {
             return new ResponseEntity<>(HttpStatus.PRECONDITION_FAILED);

@@ -15,8 +15,19 @@
         </tr>
       </tbody>
     </table>
-    <div v-show="showWallets">
-      <Wallets ref="Wallets"></Wallets>
+    <div v-bind:class="{ 'is-active': showWallets }" class="modal">
+      <div class="modal-background"></div>
+      <div class="modal-card">
+        <header class=modal-card-head>
+          <h1 class="moda-card-title title is-4"> Pagacoins wallet </h1> 
+        </header>
+        <section class="modal-card-body" id="wallets-container">
+          <Wallets ref="Wallets"></Wallets>
+        </section>
+        <footer class="modal-card-foot">
+          <button class="button" v-on:click="showWallets=false">Cancel</button>
+        </footer> 
+      </div>1
     </div>
 </div>
 </template>

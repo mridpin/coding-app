@@ -1,7 +1,6 @@
 
 <template>
-<div class="Wallets container">
-    <h1 class="title is-4"> Pagacoins wallet </h1> 
+<div class="Wallets">
     <!-- Table for wallets -->
     <table class="table is-fullwidth is-striped is-hoverable">
       <thead>
@@ -15,7 +14,7 @@
           </tr>
         </tbody>
     </table>
-    <div class="modal container" v-if="showTransaction">
+    <div class="container" v-if="showTransaction">
       <h3 class="title is-5">Make transaction</h3>
       <div id="from">
         <h4 class="title is-6">Sender ID: {{ sender.id }}</h4>

@@ -54,15 +54,14 @@ public class WalletController {
     }
 
     @CrossOrigin(origins = "http://localhost:8080")
-    @GetMapping(path = "/wallet/{id}", produces =
+    @GetMapping(path = "/wallet/{hash}", produces =
             "application" +
             "/json; " +
             "charset=UTF-8")
     @ResponseBody
     public ResponseEntity<WalletDTO> getWalletById (@PathVariable(
-            "id") Long id) {
-        Optional<Wallet> wallet = walletService.getWalletById(id);
-        logger.info("Wallet found -> {}", wallet.hashCode());
+            "hash") String hash) {
+        Optional<Wallet> wallet = walletService.getWalletByHash(hash);
         if (wallet.isPresent()) {
             return new ResponseEntity<WalletDTO>(entityToDTO(wallet.get()),
                     HttpStatus.OK);
@@ -79,9 +78,9 @@ public class WalletController {
     public ResponseEntity<WalletDTO> makeTransaction (
             @RequestBody @Valid TransactionDTO transactionDTO) {
         Optional<Wallet> sender =
-                walletService.getWalletById(transactionDTO.getSenderId());
+                walletService.getWalletByHash(transactionDTO.getSenderHash());
         Optional<Wallet> beneficiary =
-                walletService.getWalletById(transactionDTO.getBeneficiaryId());
+                walletService.getWalletByHash(transactionDTO.getBeneficiaryHash());
         logger.info("Wallet found -> {}", sender.hashCode());
         logger.info("Wallet found -> {}", beneficiary.hashCode());
         // Discard requests with non existing wallets

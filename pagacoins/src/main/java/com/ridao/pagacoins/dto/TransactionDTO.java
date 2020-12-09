@@ -16,10 +16,10 @@ import javax.validation.constraints.NotNull;
 public class TransactionDTO {
 
     @NotNull
-    private Long senderId;
+    private String senderHash;
 
     @NotNull
-    private Long beneficiaryId;
+    private String beneficiaryHash;
 
     @NotNull
     private Double amount;

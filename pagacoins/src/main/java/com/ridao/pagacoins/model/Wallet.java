@@ -12,8 +12,10 @@ import javax.persistence.*;
 @Entity
 public class Wallet {
 
-    @Id
+    @Id @GeneratedValue(strategy = GenerationType.TABLE)
     private Long id;
+
+    private String hash;
 
     private Double balance;
 

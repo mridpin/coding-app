@@ -3,6 +3,7 @@ package com.ridao.pagacoins.service;
 import com.ridao.pagacoins.model.User;
 import com.ridao.pagacoins.model.Wallet;
 import com.ridao.pagacoins.repository.WalletRepository;
+import com.ridao.pagacoins.utils.HashIdUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,8 +20,8 @@ public class WalletService {
         return repository.findByUser(user);
     }
 
-    public Optional<Wallet> getWalletById(Long id) {
-        return repository.findById(id);
+    public Optional<Wallet> getWalletByHash(String hash) {
+        return repository.findByHash(hash);
     }
 
     public boolean checkBalance(Wallet wallet, Double amount) {

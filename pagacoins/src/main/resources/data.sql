@@ -1,7 +1,7 @@
 insert into user(id, name)
 values(1, 'Bad Bunny');
 insert into user(id, name)
-values(2, 'Annuel AA');
+values(2, 'Anuel AA');
 insert into wallet(id,hash,balance,user_id)
 values(1,'2W4J',100,1);
 insert into wallet(id,hash,balance,user_id)

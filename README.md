@@ -19,6 +19,8 @@ To run the unit tests only, from the /pagacoins folder, run:
 ```
 mvn clean test
 ``` 
+Since the app uses an instance of an in-memory database (H2), it is embedded in the app and will load sample data when starting up. To add more data, edit the data.sql file in pagacoins/src/main/resources/data.sql
+
 The API can be accessed from localhost:8000
 
 ## Front end

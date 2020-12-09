@@ -5,11 +5,13 @@
     <table class="table is-fullwidth is-striped is-hoverable">
       <thead>
             <th>Wallet</th>
+            <th>Hash</th>
             <th>Balance</th>
         </thead>
         <tbody>
           <tr v-for="wallet in wallets" :key="wallet.id" v-on:click="openTransactionPanel(wallet)">
               <td>{{ wallet.id }}</td>
+              <td>{{ wallet.hash }}</td>
               <td>{{ wallet.balance }}</td>
           </tr>
         </tbody>
@@ -17,12 +19,12 @@
     <div class="container" v-if="showTransaction">
       <h3 class="title is-5">Make transaction</h3>
       <div id="from">
-        <h4 class="title is-6">Sender ID: {{ sender.id }}</h4>
+        <h4 class="title is-6">Sender Hash: {{ sender.hash }}</h4>
         <form>
           <div class="field">
             <label class="label" for="beneficiary">Beneficiary: </label>
             <div class="control">
-              <input class="input" id="beneficiary" v-model="beneficiary" type="text" placeholder="Beneficiary id">
+              <input class="input" id="beneficiary" v-model="beneficiary" type="text" placeholder="Beneficiary hash">
             </div>
           </div>
           <div class="field">
@@ -91,8 +93,8 @@
           var self = this;
           // build request object
           var body = {
-            "senderId": self.sender.id,
-            "beneficiaryId": self.beneficiary,
+            "senderHash": self.sender.hash,
+            "beneficiaryHash": self.beneficiary,
             "amount": self.amount
           };
           console.log(body);
